@@ -41,7 +41,7 @@ function calculateExpense() {
     const valueString =
       item.children[0].children[1].children[0].innerHTML.replace(/,/g, "");
 
-    // Convert the extracted value string to a floating-point number and log it to the console
+    // Convert the extracted value string to a floating point number and log it to the console
     console.log(parseFloat(valueString));
 
     // Add the converted value to the 'sum' variable
