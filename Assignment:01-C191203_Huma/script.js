@@ -81,28 +81,42 @@ calculateBudget();
 /**
  * Task 3: Delete Entry
  */
-function deleteEntry(listId, totalId) {
-  const list = document.getElementById(listId);
 
-  list.addEventListener("click", function (event) {
-    const deleteButton = event.target.closest(".text-red-500");
+// Add a click event listener to the document body
+document.body.addEventListener("click", function (event) {
+  // Check if the clicked element has the class 'text-red-500'
+  if (event.target.classList.contains('text-red-500')) {
+    // Find the closest 'li' ancestor of the clicked element
+    const listItem = event.target.closest('li');
 
-    if (deleteButton) {
-      const listItem = deleteButton.closest("li");
-      const isIncome = listItem.querySelector(".text-green-600") !== null;
-      const valueElement = listItem.querySelector(isIncome ? '.text-green-600' : '.text-red-600');
-
-      if (valueElement) {
-        const value = parseFloat(valueElement.innerHTML.replace(/,/g, ""));
-        const totalElement = document.getElementById(totalId);
-
-        totalElement.innerHTML = formatMoney(parseFloat(totalElement.innerHTML.replace(/,/g, "")) - Math.abs(value));
-
-        calculateBudget();
-        listItem.remove();
-      }
+    if (listItem) {
+      // Call the deleteEntry function with the list item as an argument
+      deleteEntry(listItem);
     }
-  });
+  }
+});
+
+// Function to handle the deletion of entries
+function deleteEntry(listItem) {
+  // Get the parent list of the list item
+  const list = listItem.parentElement;
+
+  // Extract the value string from the entry and convert it to a floating-point number
+  const valueString = listItem.querySelector(".text-green-600, .text-red-600").innerHTML.replace(/,/g, "");
+  const value = parseFloat(valueString);
+
+  // Remove the list item from the parent list
+  list.removeChild(listItem);
+
+  // Check which list was affected and recalculate either income or expense
+  if (list.id === "income-list") {
+    calculateIncome();
+  } else if (list.id === "expense-list") {
+    calculateExpense();
+  }
+
+  // Recalculate the budget after deleting an item
+  calculateBudget();
 }
 
 function addEntry() {
