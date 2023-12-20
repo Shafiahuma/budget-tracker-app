@@ -51,7 +51,6 @@ function calculateExpense() {
   // Set the inner HTML of the 'totalExpense' element to the formatted total expense
   totalExpense.innerHTML = formatMoney(sum);
 }
-
 calculateExpense()
 
 /**
@@ -106,7 +105,6 @@ function deleteEntry(listId, totalId) {
   });
 }
 
-
 function addEntry() {
   const type = selectInput.value;
   const description = descriptionInput.value;
@@ -155,10 +153,10 @@ function addEntry() {
   // update total expense value
   calculateExpense();
 
-  //update total balance
+  // update total bugdet value
   calculateBudget();
 }
 
 addExpenseButton.addEventListener("click", addEntry);
-deleteEntry("income-list", "total-income");
-deleteEntry("expense-list", "total-expense");
+
+

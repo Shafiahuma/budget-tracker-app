@@ -27,7 +27,7 @@
       <div class="mx-auto max-w-sm px-5 py-8 text-center text-white">
         <div>
           <h2>Available Budget</h2>
-          <p class="mt-1 text-4xl font-medium">+ BDT 14,340.00</p>
+          <p id= "total-budget" class="mt-1 text-4xl font-medium">+ BDT 14,340.00</p>
         </div>
 
         <div
@@ -41,7 +41,7 @@
           class="mt-2 flex items-center justify-between bg-red-500 px-4 py-3 text-sm"
         >
           <span>Expenses</span>
-          <span>- BDT 1,762.69</span>
+          <span id="total-expense">- BDT 1,762.69</span>
         </div>
       </div>
     </div>
@@ -106,6 +106,7 @@
     <div
       class="mx-auto my-8 grid max-w-4xl grid-cols-1 gap-8 px-5 text-sm md:grid-cols-2"
     >
+      <!-- income list  -->
       <div>
         <h2 class="border-b pb-2 font-medium text-green-600">Income</h2>
 
@@ -156,6 +157,8 @@
           </li>
         </ul>
       </div>
+
+      <!-- expense list  -->
       <div>
         <h2 class="border-b pb-2 font-medium text-red-600">Expense</h2>
 
@@ -234,6 +237,7 @@
         </ul>
       </div>
     </div>
-    
+
+    <script src="/script.js"></script>
   </body>
 </html>
