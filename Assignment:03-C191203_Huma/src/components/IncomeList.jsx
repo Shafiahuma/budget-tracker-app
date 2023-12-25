@@ -4,8 +4,19 @@ import { formatMoney } from "../utils/format-money";
 import { useEntries } from "../hooks/useEntries";
 
 export default function IncomeList() {
-  const { entries, deleteEntry } = useEntries();
+  const { entries, deleteEntry, setEntries, totalIncome, totalExpense } = useEntries();
   const incomeEntries = entries.filter((entry) => entry.type === "income");
+
+  const handleEdit = (income) => {
+    const newValue = prompt("Enter a new value for this entry:", formatMoney(income.value));
+    
+    if (newValue !== null && !isNaN(parseFloat(newValue))) {
+      const updatedEntries = entries.map((entry) =>
+        entry.id === income.id ? { ...entry, value: parseFloat(newValue) } : entry
+      );
+      setEntries(updatedEntries);
+    }
+  };
 
   return (
     <div>
@@ -26,6 +37,12 @@ export default function IncomeList() {
                   onClick={() => deleteEntry(income.id)}
                 >
                   Delete
+                </span>
+                <span
+                  className="ml-2 hidden cursor-pointer font-medium text-blue-500 group-hover:inline-block"
+                  onClick={() => handleEdit(income)}
+                >
+                  Edit
                 </span>
               </div>
             </div>
