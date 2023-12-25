@@ -1,13 +1,31 @@
+// AddEntry.jsx
+
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useEntries } from "../hooks/useEntries";
 
 export default function AddEntry() {
-  const { entries, setEntries } = useEntries();
+  const { entries, setEntries, totalIncome, totalExpense } = useEntries();
 
   const [type, setType] = useState("income");
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
+
+  const handleAddEntry = () => {
+    const newEntry = {
+      id: uuidv4(),
+      title: title,
+      value: parseFloat(value),
+      type: type,
+    };
+
+    if (type === "expense" && totalExpense + newEntry.value > totalIncome) {
+      alert("Warning: Total expense cannot exceed total income!");
+      return;
+    }
+
+    setEntries([...entries, newEntry]);
+  };
 
   return (
     <div className="border-b bg-gray-100 py-3">
@@ -16,16 +34,7 @@ export default function AddEntry() {
           className="flex gap-2"
           onSubmit={(e) => {
             e.preventDefault();
-            console.log("submitted");
-            setEntries([
-              ...entries,
-              {
-                id: uuidv4(),
-                title: title,
-                value: parseFloat(value),
-                type: type,
-              },
-            ]);
+            handleAddEntry();
           }}
         >
           <select

@@ -9,10 +9,18 @@ export default function ExpenseList() {
 
   const handleEdit = (expense) => {
     const newValue = prompt("Enter a new value for this entry:", formatMoney(expense.value));
-    
+
     if (newValue !== null && !isNaN(parseFloat(newValue))) {
+      const newExpenseValue = parseFloat(newValue);
+      const remainingTotalExpense = totalExpense - expense.value + newExpenseValue;
+
+      if (remainingTotalExpense > totalIncome) {
+        alert("Warning: Editing this expense would exceed total income!");
+        return;
+      }
+
       const updatedEntries = entries.map((entry) =>
-        entry.id === expense.id ? { ...entry, value: parseFloat(newValue) } : entry
+        entry.id === expense.id ? { ...entry, value: newExpenseValue } : entry
       );
       setEntries(updatedEntries);
     }
