@@ -1,12 +1,18 @@
+//./node_modules/.bin/vite
+
 import { useEntries } from "../hooks/useEntries";
 
 export default function Budget() {
   const { totalIncome, totalExpense } = useEntries();
+
+  // Calculate the total budget
+  const totalBudget = totalIncome - totalExpense;
+
   return (
     <div className="mx-auto max-w-sm px-5 py-8 text-center text-white">
       <div>
         <h2>Available Budget</h2>
-        <p className="mt-1 text-4xl font-medium">+ BDT 14,340.00</p>
+        <p className="mt-1 text-4xl font-medium">+ BDT {totalBudget.toFixed(2)}</p>
       </div>
 
       <div className="mt-4 flex items-center justify-between bg-green-500 px-4 py-3 text-sm">

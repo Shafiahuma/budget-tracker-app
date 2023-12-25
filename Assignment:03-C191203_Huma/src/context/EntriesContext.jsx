@@ -1,4 +1,7 @@
+// EntriesContext.jsx
+
 import { createContext, useEffect, useState } from "react";
+
 export const EntriesContext = createContext();
 
 export function EntriesProvider({ children }) {
@@ -20,9 +23,14 @@ export function EntriesProvider({ children }) {
     .filter((entry) => entry.type === "expense")
     .reduce((prev, entry) => prev + entry.value, 0);
 
+  const deleteEntry = (id) => {
+    const updatedEntries = entries.filter((entry) => entry.id !== id);
+    setEntries(updatedEntries);
+  };
+
   return (
     <EntriesContext.Provider
-      value={{ entries, setEntries, totalIncome, totalExpense }}
+      value={{ entries, setEntries, totalIncome, totalExpense, deleteEntry }}
     >
       {children}
     </EntriesContext.Provider>
