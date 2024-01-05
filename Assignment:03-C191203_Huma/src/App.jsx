@@ -1,3 +1,4 @@
+//App.jsx
 import AddEntry from "./components/AddEntry";
 import Header from "./components/Header";
 import Listing from "./components/Listing";

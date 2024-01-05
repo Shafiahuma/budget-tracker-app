@@ -1,23 +1,27 @@
 //./node_modules/.bin/vite
+// src/components/Budget.jsx
+// src/components/Budget.jsx
 
 import { useEntries } from "../hooks/useEntries";
 import { useState, useEffect } from "react";
 import axios from 'axios';
+
 export default function Budget() {
-  const { budget, setBudget } = useState('');
+  const { totalIncome, totalExpense } = useEntries(); // Correctly use totalIncome and totalExpense
+
+  const [budget, setBudget] = useState('');
 
   useEffect(() => {
-    const fetchbudgetData = async () => {
-      try{
+    const fetchBudgetData = async () => {
+      try {
         const budgetResponse = await axios.get('http://localhost:3000/budget');
-
         setBudget(budgetResponse.data);
-      } catch(error) {
+      } catch (error) {
         console.error('Error fetching budget data:', error);
       }
     };
 
-    fetchbudgetData();
+    fetchBudgetData();
   }, []);
 
   return (

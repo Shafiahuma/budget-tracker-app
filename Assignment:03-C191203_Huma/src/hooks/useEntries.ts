@@ -1,3 +1,4 @@
+//hooks/useEntries.ts
 import { useContext } from "react";
 import { EntriesContext } from "../context/EntriesContext";
 
