@@ -77,16 +77,16 @@ export default function ExpenseList() {
                     -{formatMoney(item.value)}
                   </span>
                   <span
-                    className="ml-2 hidden cursor-pointer font-medium text-blue-500 group-hover:inline-block"
-                    onClick={() => setEditingEntry(item.id)}
-                  >
-                    Edit
-                  </span>
-                  <span
                     className="ml-2 hidden cursor-pointer font-medium text-red-500 group-hover:inline-block"
                     onClick={() => handleDelete(item.id)}
                   >
                     Delete
+                  </span>
+                  <span
+                    className="ml-2 hidden cursor-pointer font-medium text-blue-500 group-hover:inline-block"
+                    onClick={() => setEditingEntry(item.id)}
+                  >
+                    Edit
                   </span>
                 </div>
               </div>

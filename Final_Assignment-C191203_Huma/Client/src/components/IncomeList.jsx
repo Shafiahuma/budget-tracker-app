@@ -18,6 +18,7 @@ export default function IncomeList() {
       if (response.ok) {
         const updatedEntries = entries.filter((entry) => entry.id !== id);
         setEntries(updatedEntries);
+        window.location.reload();
       } else {
         console.error("Failed to delete entry. Server responded with:", response.status, response.statusText);
       }
@@ -43,6 +44,7 @@ export default function IncomeList() {
         setEntries(updatedEntries);
         setEditingEntry(null);
         setEditedValue("");
+        window.location.reload();
       } else {
         console.error("Failed to edit entry. Server responded with:", response.status, response.statusText);
       }
@@ -74,16 +76,16 @@ export default function IncomeList() {
                     +{formatMoney(income.value)}
                   </span>
                   <span
-                    className="ml-2 hidden cursor-pointer font-medium text-blue-500 group-hover:inline-block"
-                    onClick={() => setEditingEntry(item.id)}
-                  >
-                    Edit
-                  </span>
-                  <span
                     className="ml-2 hidden cursor-pointer font-medium text-red-500 group-hover:inline-block"
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => handleDelete(income.id)}
                   >
                     Delete
+                  </span>
+                  <span
+                    className="ml-2 hidden cursor-pointer font-medium text-blue-500 group-hover:inline-block"
+                    onClick={() => setEditingEntry(income.id)}
+                  >
+                    Edit
                   </span>
                 </div>
               </div>
