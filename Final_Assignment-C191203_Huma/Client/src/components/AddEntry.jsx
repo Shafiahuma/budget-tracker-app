@@ -1,7 +1,5 @@
 // //src/components/AddEntry.jsx
 // //./node_modules/.bin/vite
-
-// src/components/AddEntry.jsx
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useEntries } from "../hooks/useEntries";
@@ -9,46 +7,53 @@ import { useEntries } from "../hooks/useEntries";
 export default function AddEntry() {
   const { entries, setEntries } = useEntries();
 
-  const [type, setType] = useState("income");
+  const [type, setType] = useState("Type");
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
-  const [category, setCategory] = useState("Utility Bill");
+  const [category, setCategory] = useState("Category");
 
   const submitEntry = async () => {
     try {
-      // Prepare the data to be sent to the server
-      const entryData = {
-        title,
-        type,
-        category,
-        value: parseFloat(value),
-      };
+      // Check if type and category are valid
+      if (type !== "Type" && category !== "Category") {
+        // Prepare the data to be sent to the server
+        const entryData = {
+          title,
+          type,
+          category,
+          value: parseFloat(value),
+        };
 
-      // Make a POST request to the server
-      const response = await fetch("http://localhost:3000/entries", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(entryData),
-      });
+        // Make a POST request to the server
+        const response = await fetch("http://localhost:3000/entries", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(entryData),
+        });
 
-      if (response.ok) {
-        // Fetch the entries from the server after successful submission
-        const entriesResponse = await fetch("http://localhost:3000/entries");
-        const entriesData = await entriesResponse.json();
-        console.log("Entries from the server response:", entriesData);
+        if (response.ok) {
+          // Fetch the entries from the server after successful submission
+          const entriesResponse = await fetch("http://localhost:3000/entries");
+          const entriesData = await entriesResponse.json();
+          console.log("Entries from the server response:", entriesData);
 
-        // Update the local state with the new entries from the server
-        setEntries(entriesData);
+          // Update the local state with the new entries from the server
+          setEntries(entriesData);
 
-        // Clear the form after successful submission
-        setTitle("");
-        setType("income");
-        setValue("");
-        setCategory("Utility Bill");
+          // Clear the form after successful submission
+          setTitle("");
+          setType("income");
+          setValue("");
+          setCategory("Category");
+          window.location.reload();
+        } else {
+          console.error("Failed to add entry. Server responded with:", response.status, response.statusText);
+        }
       } else {
-        console.error("Failed to add entry. Server responded with:", response.status, response.statusText);
+        // Display an alert for invalid entry
+        alert("Please enter a valid entry.");
       }
     } catch (error) {
       console.error("An error occurred while adding the entry:", error.message);
@@ -72,6 +77,7 @@ export default function AddEntry() {
               setCategory(e.target.value);
             }}
           >
+            <option value="Category">Category</option>
             <option value="Utility Bill">Utility Bill</option>
             <option value="Rent">Rent</option>
             <option value="Freelancing">Freelancing</option>
@@ -88,6 +94,7 @@ export default function AddEntry() {
               setType(e.target.value);
             }}
           >
+            <option value="Type">Type</option>
             <option value="income">+</option>
             <option value="expense">-</option>
           </select>
