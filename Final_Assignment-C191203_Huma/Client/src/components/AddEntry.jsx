@@ -1,6 +1,6 @@
 // //src/components/AddEntry.jsx
 // //./node_modules/.bin/vite
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useEntries } from "../hooks/useEntries";
 
@@ -11,45 +11,76 @@ export default function AddEntry() {
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
   const [category, setCategory] = useState("Category");
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [totalExpense, setTotalExpense] = useState(0);
+
+  useEffect(() => {
+    // Fetch total income and total expense
+    const fetchBudgetData = async () => {
+      try {
+        const incomeResponse = await fetch("http://localhost:3000/budget/income");
+        const incomeData = await incomeResponse.json();
+        setTotalIncome(incomeData.totalIncome);
+
+        const expenseResponse = await fetch("http://localhost:3000/budget/expense");
+        const expenseData = await expenseResponse.json();
+        setTotalExpense(expenseData.totalExpense);
+      } catch (error) {
+        console.error("Error fetching budget data:", error.message);
+      }
+    };
+
+    fetchBudgetData();
+  }, [entries]);
 
   const submitEntry = async () => {
     try {
       // Check if type and category are valid
       if (type !== "Type" && category !== "Category") {
-        // Prepare the data to be sent to the server
-        const entryData = {
-          title,
-          type,
-          category,
-          value: parseFloat(value),
-        };
+        // Calculate new totals with the potential entry
+        const newTotalIncome = type === "income" ? totalIncome + parseFloat(value) : totalIncome;
+        const newTotalExpense = type === "expense" ? totalExpense + parseFloat(value) : totalExpense;
 
-        // Make a POST request to the server
-        const response = await fetch("http://localhost:3000/entries", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(entryData),
-        });
+        // Check if new entry is valid based on totals
+        if (newTotalIncome >= newTotalExpense) {
+          // Prepare the data to be sent to the server
+          const entryData = {
+            title,
+            type,
+            category,
+            value: parseFloat(value),
+          };
 
-        if (response.ok) {
-          // Fetch the entries from the server after successful submission
-          const entriesResponse = await fetch("http://localhost:3000/entries");
-          const entriesData = await entriesResponse.json();
-          console.log("Entries from the server response:", entriesData);
+          // Make a POST request to the server
+          const response = await fetch("http://localhost:3000/entries", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(entryData),
+          });
 
-          // Update the local state with the new entries from the server
-          setEntries(entriesData);
+          if (response.ok) {
+            // Fetch the entries from the server after successful submission
+            const entriesResponse = await fetch("http://localhost:3000/entries");
+            const entriesData = await entriesResponse.json();
+            console.log("Entries from the server response:", entriesData);
 
-          // Clear the form after successful submission
-          setTitle("");
-          setType("income");
-          setValue("");
-          setCategory("Category");
-          window.location.reload();
+            // Update the local state with the new entries from the server
+            setEntries(entriesData);
+
+            // Clear the form after successful submission
+            setTitle("");
+            setType("income");
+            setValue("");
+            setCategory("Category");
+            window.location.reload();
+          } else {
+            console.error("Failed to add entry. Server responded with:", response.status, response.statusText);
+          }
         } else {
-          console.error("Failed to add entry. Server responded with:", response.status, response.statusText);
+          // Display an alert for insufficient funds
+          alert("Total income must be greater than or equal to total expense. Please adjust your entry.");
         }
       } else {
         // Display an alert for invalid entry
