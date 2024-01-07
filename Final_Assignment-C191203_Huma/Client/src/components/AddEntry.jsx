@@ -20,11 +20,11 @@ export default function AddEntry() {
       try {
         const incomeResponse = await fetch("http://localhost:3000/budget/income");
         const incomeData = await incomeResponse.json();
-        setTotalIncome(incomeData.totalIncome);
+        setTotalIncome(incomeData);
 
         const expenseResponse = await fetch("http://localhost:3000/budget/expense");
         const expenseData = await expenseResponse.json();
-        setTotalExpense(expenseData.totalExpense);
+        setTotalExpense(expenseData);
       } catch (error) {
         console.error("Error fetching budget data:", error.message);
       }
@@ -37,12 +37,21 @@ export default function AddEntry() {
     try {
       // Check if type and category are valid
       if (type !== "Type" && category !== "Category") {
-        // Calculate new totals with the potential entry
+
+        // Calculate new totals with the new entry
         const newTotalIncome = type === "income" ? totalIncome + parseFloat(value) : totalIncome;
         const newTotalExpense = type === "expense" ? totalExpense + parseFloat(value) : totalExpense;
 
+        //print to check
+        console.log('totalIncome', totalIncome);
+        console.log('totalExpense', totalExpense);
+        console.log('value', value);
+        console.log("newTotalExpense", newTotalExpense);
+        console.log("newTotalIncome", newTotalIncome);
+
         // Check if new entry is valid based on totals
         if (newTotalIncome >= newTotalExpense) {
+
           // Prepare the data to be sent to the server
           const entryData = {
             title,
@@ -78,13 +87,17 @@ export default function AddEntry() {
           } else {
             console.error("Failed to add entry. Server responded with:", response.status, response.statusText);
           }
-        } else {
+        } 
+        else {
           // Display an alert for insufficient funds
           alert("Total income must be greater than or equal to total expense. Please adjust your entry.");
+          window.location.reload();
         }
-      } else {
+      } 
+      else {
         // Display an alert for invalid entry
         alert("Please enter a valid entry.");
+        window.location.reload();
       }
     } catch (error) {
       console.error("An error occurred while adding the entry:", error.message);

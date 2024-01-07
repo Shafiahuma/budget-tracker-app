@@ -35,7 +35,7 @@ router.get("/expense", async function (req, res, next) {
   
       // Extract the total expense from the query result
       const totalExpense = result.rows[0].total_expense;
-      console.log(totalExpense);
+      //console.log(totalExpense);
       // Send the total expense as a JSON response
       res.send(JSON.stringify(totalExpense));
     } catch (error) {
